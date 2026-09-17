@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flowers For You</title>
+  <style>
+    /* --- 1. BASE SETUP --- */
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0b0815; /* Dark night sky */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Georgia', serif;
+    }
+
+    /* --- 2. STARRY BACKGROUND --- */
+    .stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 160px 120px, #ffffff, rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      animation: twinkle 4s infinite alternate;
+      z-index: 1;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.3; }
+      100% { opacity: 0.8; }
+    }
+
+    /* --- 3. TEXT --- */
+    .title {
+      position: absolute;
+      top: 15%;
+      font-size: 3rem;
+      font-style: italic;
+      background: linear-gradient(to right, #b96eff, #e0aaff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(185, 110, 255, 0.5);
+      z-index: 10;
+      animation: fadeIn 2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- 4. SCENE CONTAINER --- */
+    .scene {
+      position: relative;
+      width: 300px;
+      height: 400px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      z-index: 5;
+    }
+
+    /* --- 5. ENVELOPE --- */
+    .envelope {
+      width: 120px;
+      height: 80px;
+      background: linear-gradient(135deg, #ffb6c1, #ff8da1);
+      position: absolute;
+      bottom: 20px;
+      border-radius: 4px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.3);
+      z-index: 20; /* Sits in front of the stems */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Envelope Flap */
+    .envelope::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-top: 40px solid #ffc0cb;
+      border-left: 60px solid transparent;
+      border-right: 60px solid transparent;
+      box-sizing: border-box;
+      border-radius: 4px 4px 0 0;
+      filter: brightness(1.1);
+    }
+
+    /* Cute Heart on Envelope */
+    .heart {
+      width: 15px;
+      height: 15px;
+      background: #ff477e;
+      position: relative;
+      transform: rotate(-45deg);
+      z-index: 25;
+      margin-top: 15px;
+      box-shadow: 0 0 10px rgba(255, 71, 126, 0.8);
+    }
+    .heart::before, .heart::after {
+      content: '';
+      width: 15px;
+      height: 15px;
+      background: #ff477e;
+      border-radius: 50%;
+      position: absolute;
+    }
+    .heart::before { top: -7.5px; left: 0; }
+    .heart::after { top: 0; left: 7.5px; }
+
+    /* --- 6. FLOWERS & STEMS --- */
+    .bouquet {
+      position: absolute;
+      bottom: 80px; /* Sits on top of envelope */
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .flower {
+      position: absolute;
+      bottom: 0;
+      transform-origin: bottom center;
+      /* Animation starts hidden (scale 0) */
+      animation: bloom 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    /* The Green Stem */
+    .stem {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 100px;
+      background: linear-gradient(to top, #2e7d32, #66bb6a);
+      border-radius: 2px;
+    }
+
+    /* The Purple Petals (Using the logic from your screenshot) */
+    .petals {
+      position: absolute;
+      bottom: 90px; /* Sits at the top of the stem */
+      left: 50%;
+      transform: translateX(-50%) rotate(var(--rotation)) scale(0);
+      width: 30px;
+      height: 45px;
+      background-image: linear-gradient(to bottom, #b96eff, #6a1b9a);
+      /* The ellipse clip-path from your screenshot */
+      clip-path: ellipse(50% 50% at 50% 50%);
+      /* Simulate the tulip shape by overlapping two ellipses */
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      box-shadow: inset -5px -5px 10px rgba(0,0,0,0.3), inset 5px 5px 10px rgba(255,255,255,0.4);
+      animation: open-flower 1.5s ease-out forwards;
+      animation-delay: inherit;
+    }
+
+    /* Add a second petal to make it look like a tulip */
+    .petals::after {
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 20px;
+      height: 35px;
+      background-image: linear-gradient(to bottom, #d99cff, #9c27b0);
+      clip-path: ellipse(50% 50% at 50% 50%);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      transform: rotate(15deg);
+    }
+
+    /* --- 7. ANIMATIONS --- */
+    @keyframes open-flower {
+      0% {
+        transform: translateX(-50%) rotate(var(--rotation)) scale(0);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(-50%) rotate(var(--rotation)) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes bloom {
+      0% { height: 0; }
+      100% { height: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Stars -->
+  <div class="stars"></div>
+  
+  <!-- Text -->
+  <h1 class="title">Flowers For You</h1>
+
+  <!-- Main Scene -->
+  <div class="scene">
+    <div class="bouquet" id="bouquet">
+      <!-- Flowers will be generated here by JavaScript -->
+    </div>
+    
+    <div class="envelope">
+      <div class="heart"></div>
+    </div>
+  </div>
+
+  <script>
+    // --- 8. JAVASCRIPT GENERATOR ---
+    const bouquet = document.getElementById('bouquet');
+    
+    // Configuration
+    const totalFlowers = 15; // How many flowers to generate
+    const colors = [
+      'linear-gradient(to bottom, #b96eff, #6a1b9a)', // Deep purple
+      'linear-gradient(to bottom, #d99cff, #9c27b0)', // Light purple
+      'linear-gradient(to bottom, #e0aaff, #7b1fa2)'  // Lavender
+    ];
+
+    // Generate the bouquet
+    for (let i = 0; i < totalFlowers; i++) {
+      
+      // Create the flower container
+      const flower = document.createElement('div');
+      flower.classList.add('flower');
+      
+      // Calculate a random angle to spread the flowers out (-40 to 40 degrees)
+      const angle = (Math.random() * 80) - 40;
+      
+      // Randomize the height (how tall the stems are)
+      const stemHeight = 80 + Math.random() * 60; // Between 80px and 140px
+      
+      // Randomize the delay so they grow one by one
+      const delay = Math.random() * 1.5; // 0 to 1.5 seconds
+      
+      // Randomize scale slightly so some are bigger than others
+      const scale = 0.8 + Math.random() * 0.4; // 0.8 to 1.2
+
+      // Apply the randomization to CSS variables
+      flower.style.setProperty('--rotation', `${angle}deg`);
+      flower.style.animationDelay = `${delay}s`;
+      
+      // Create the Stem
+      const stem = document.createElement('div');
+      stem.classList.add('stem');
+      stem.style.height = `${stemHeight}px`;
+      
+      // Create the Petals
+      const petals = document.createElement('div');
+      petals.classList.add('petals');
+      petals.style.bottom = `${stemHeight - 10}px`; // Position at top of stem
+      petals.style.setProperty('--rotation', `${angle}deg`);
+      petals.style.animationDelay = `${delay}s`;
+      
+      // Randomly select a color gradient
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      petals.style.backgroundImage = randomColor;
+      
+      // Apply scaling based on random factor
+      petals.style.transform = `translateX(-50%) rotate(${angle}deg) scale(${scale})`;
+
+      // Assemble the flower
+      flower.appendChild(stem);
+      flower.appendChild(petals);
+      
+      // Add to the bouquet
+      bouquet.appendChild(flower);
+    }
+  </script>
+</body>
+</html>
